@@ -5,8 +5,9 @@ import {
   Text,
   View
 } from 'react-native';
+import RandomNumber from './../elements/RandomNumber';
 
-export default class App extends Component {
+class Game extends Component {
   static propTypes = {
     randomNumberCount: PropTypes.number.isRequired,
   };
@@ -14,11 +15,7 @@ export default class App extends Component {
   _multiOptions(number){
     return (
       number.map((randomNumber, index) => 
-        
-          <Text key={index} style={styles.randomText}>
-            {randomNumber}
-          </Text>
-        
+        <RandomNumber key={index} number={randomNumber} />
       )
     );
   }
@@ -28,7 +25,7 @@ export default class App extends Component {
     .map( () => 1 + Math.floor(10 * Math.random()) );
   
   target = this.randomNumbers
-    .slice(0, this.props.randomNumberCount - 2)
+    .slice(0, this.props.randomNumberCount)
     .reduce((accumulator, current) => accumulator + current, 0);
 
   render() {
@@ -63,12 +60,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
-  randomText: {
-    backgroundColor: 'lightgrey',
-    marginHorizontal: 15,
-    marginVertical: 25,
-    fontSize: 35,
-    textAlign: 'center',
-    width: 100,
-  }
 });
+
+export default Game;
