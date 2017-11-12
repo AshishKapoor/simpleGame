@@ -11,11 +11,23 @@ class Game extends Component {
   static propTypes = {
     randomNumberCount: PropTypes.number.isRequired,
   };
-  
+
+  state = {
+    selectedNumbers: [0, 4],
+  };
+
+  isNumberSelected = (numberIndex) => {
+    return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
+  }
+
   _multiOptions(number){
     return (
       number.map((randomNumber, index) => 
-        <RandomNumber key={index} number={randomNumber} />
+        <RandomNumber 
+        key={index} 
+        number={randomNumber} 
+        isSelected={this.isNumberSelected(index)}
+        />
       )
     );
   }
