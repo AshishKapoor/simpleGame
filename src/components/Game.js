@@ -13,16 +13,16 @@ class Game extends Component {
   };
 
   state = {
-    selectedNumbers: [],
+    selectedIds: [],
   };
 
   isNumberSelected = (numberIndex) => {
-    return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
+    return this.state.selectedIds.indexOf(numberIndex) >= 0;
   }
 
   selectNumber = (numberIndex) => {
     this.setState((prevState) => ({
-      selectedNumbers: [...prevState.selectedNumbers, numberIndex],
+      selectedIds: [...prevState.selectedIds, numberIndex],
     }));
   };
 
@@ -48,7 +48,24 @@ class Game extends Component {
     .slice(0, this.props.randomNumberCount)
     .reduce((accumulator, current) => accumulator + current, 0);
 
+  // gameStatus: PLAYING, WON, LOST
+  gameStatus = () => {
+    const sumSelected = this.state.selectedIds.reduce((accumulator, current) => {
+      return accumulator + this.randomNumbers[current];
+    }, 0);
+    if(sumSelected < this.target) {
+      return 'PLAYING';
+    }
+    if(sumSelected === this.target) {
+      return 'WON';
+    }
+    if(sumSelected > this.target) {
+      return 'LOST';
+    }
+  }
+
   render() {
+    const gameStatus = this.gameStatus();
     return (
       <View style={styles.container}>
         <Text style={styles.targetText}>
@@ -57,6 +74,7 @@ class Game extends Component {
         <View style={styles.randomContainer}>
           {this._multiOptions(this.randomNumbers)}
         </View>
+        <Text>{gameStatus}</Text>
       </View>
     );
   }
