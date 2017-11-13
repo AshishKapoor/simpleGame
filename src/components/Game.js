@@ -13,20 +13,28 @@ class Game extends Component {
   };
 
   state = {
-    selectedNumbers: [0, 4],
+    selectedNumbers: [],
   };
 
   isNumberSelected = (numberIndex) => {
     return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
   }
 
+  selectNumber = (numberIndex) => {
+    this.setState((prevState) => ({
+      selectedNumbers: [...prevState.selectedNumbers, numberIndex],
+    }));
+  };
+
   _multiOptions(number){
     return (
       number.map((randomNumber, index) => 
         <RandomNumber 
-        key={index} 
-        number={randomNumber} 
-        isSelected={this.isNumberSelected(index)}
+          key={index}
+          id={index}
+          number={randomNumber} 
+          isDisabled={this.isNumberSelected(index)}
+          onPress={this.selectNumber}
         />
       )
     );
