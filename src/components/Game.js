@@ -10,12 +10,15 @@ import RandomNumber from './../elements/RandomNumber';
 class Game extends Component {
   static propTypes = {
     randomNumberCount: PropTypes.number.isRequired,
+    initialSeconds: PropTypes.number.isRequired,
   };
 
   state = {
     selectedIds: [],
+    remainingSeconds: this.props.initialSeconds,
   };
 
+  gameStatus = 'PLAYING';
   isNumberSelected = (numberIndex) => {
     return this.state.selectedIds.indexOf(numberIndex) >= 0;
   }
@@ -34,11 +37,38 @@ class Game extends Component {
     .slice(0, this.props.randomNumberCount - 2)
     .reduce((accumulator, current) => accumulator + current, 0);
 
+  componentDidMount(){
+    this.intervalId = setInterval(() => {
+      this.setState((prevState) => {
+        return {remainingSeconds: prevState.remainingSeconds - 1};
+      }, () => {
+
+        if (this.state.remainingSeconds === 0) {
+          clearInterval(this.intervalId);
+        }        
+      
+      });
+    }, 1000);
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    if (nextState.selectedIds !== this.state.selectedIds || nextState.remainingSeconds === 0) {
+      this.gameStatus = this.calcGameStatus(nextState);
+    }
+  }
+
+  componentDidUnMount() {
+    clearInterval(this.intervalId);
+  }
+
   // gameStatus: PLAYING, WON, LOST
-  gameStatus = () => {
-    const sumSelected = this.state.selectedIds.reduce((accumulator, current) => {
+  calcGameStatus = (nextState) => {
+    const sumSelected = nextState.selectedIds.reduce((accumulator, current) => {
       return accumulator + this.randomNumbers[current];
     }, 0);
+    if(nextState.remainingSeconds === 0) {
+      return 'LOST';
+    }
     if(sumSelected < this.target) {
       return 'PLAYING';
     }
@@ -51,7 +81,7 @@ class Game extends Component {
   }
 
   render() {
-    const gameStatus = this.gameStatus();
+    const gameStatus = this.gameStatus;
     return (
       <View style={styles.container}>
         <Text style={[styles.targetText, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
@@ -66,7 +96,7 @@ class Game extends Component {
             />
           )}
         </View>
-        <Text style={[styles.gameStatusText, styles[`STATUS_${gameStatus}`]]}>{gameStatus}</Text>
+        <Text>{this.state.remainingSeconds}</Text>
       </View>
     );
   }
