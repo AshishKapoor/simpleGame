@@ -74,7 +74,7 @@ class Game extends Component {
         <View style={styles.randomContainer}>
           {this._multiOptions(this.randomNumbers)}
         </View>
-        <Text>{gameStatus}</Text>
+        <Text style={styles.gameStatus}>{gameStatus}</Text>
       </View>
     );
   }
@@ -98,6 +98,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
+  gameStatus: {
+    fontSize: 25,
+    textAlign: 'center',
+    margin: 25,
+    backgroundColor: 'white',
+  }
 });
 
 export default Game;
