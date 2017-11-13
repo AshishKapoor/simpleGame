@@ -26,26 +26,12 @@ class Game extends Component {
     }));
   };
 
-  _multiOptions(number){
-    return (
-      number.map((randomNumber, index) => 
-        <RandomNumber 
-          key={index}
-          id={index}
-          number={randomNumber} 
-          isDisabled={this.isNumberSelected(index)}
-          onPress={this.selectNumber}
-        />
-      )
-    );
-  }
-
   randomNumbers = Array
     .from({ length: this.props.randomNumberCount })
     .map( () => 1 + Math.floor(10 * Math.random()) );
   
   target = this.randomNumbers
-    .slice(0, this.props.randomNumberCount)
+    .slice(0, this.props.randomNumberCount - 2)
     .reduce((accumulator, current) => accumulator + current, 0);
 
   // gameStatus: PLAYING, WON, LOST
@@ -70,9 +56,17 @@ class Game extends Component {
       <View style={styles.container}>
         <Text style={[styles.targetText, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
         <View style={styles.randomContainer}>
-          {this._multiOptions(this.randomNumbers)}
+          {this.randomNumbers.map((randomNumber, index) => 
+            <RandomNumber 
+              key={index}
+              id={index}
+              number={randomNumber} 
+              isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'}
+              onPress={this.selectNumber}
+            />
+          )}
         </View>
-        <Text style={[styles.gameStatus, styles[`STATUS_${gameStatus}`]]}>{gameStatus}</Text>
+        <Text style={[styles.gameStatusText, styles[`STATUS_${gameStatus}`]]}>{gameStatus}</Text>
       </View>
     );
   }
@@ -96,7 +90,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
-  gameStatus: {
+  gameStatusText: {
     fontSize: 25,
     textAlign: 'center',
     margin: 25,
