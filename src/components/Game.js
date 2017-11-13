@@ -68,13 +68,11 @@ class Game extends Component {
     const gameStatus = this.gameStatus();
     return (
       <View style={styles.container}>
-        <Text style={styles.targetText}>
-          {this.target}
-        </Text>
+        <Text style={[styles.targetText, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
         <View style={styles.randomContainer}>
           {this._multiOptions(this.randomNumbers)}
         </View>
-        <Text style={styles.gameStatus}>{gameStatus}</Text>
+        <Text style={[styles.gameStatus, styles[`STATUS_${gameStatus}`]]}>{gameStatus}</Text>
       </View>
     );
   }
@@ -103,7 +101,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 25,
     backgroundColor: 'white',
-  }
+  },
+  STATUS_PLAYING: {
+    backgroundColor: '#bbb'
+  },
+  STATUS_WON: {
+    backgroundColor: 'green'
+  },
+  STATUS_LOST: {
+    backgroundColor: 'red'
+  },
+
 });
 
 export default Game;
