@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
 } from 'react-native';
 import RandomNumber from './../elements/RandomNumber';
 
@@ -11,6 +12,7 @@ class Game extends Component {
   static propTypes = {
     randomNumberCount: PropTypes.number.isRequired,
     initialSeconds: PropTypes.number.isRequired,
+    onPlayAgain: PropTypes.func.isRequired,
   };
 
   state = {
@@ -42,11 +44,9 @@ class Game extends Component {
       this.setState((prevState) => {
         return {remainingSeconds: prevState.remainingSeconds - 1};
       }, () => {
-
         if (this.state.remainingSeconds === 0) {
           clearInterval(this.intervalId);
-        }        
-      
+        }
       });
     }, 1000);
   }
@@ -96,6 +96,10 @@ class Game extends Component {
             />
           )}
         </View>
+        <Button 
+          title="Play Again" 
+          onPress={this.props.onPlayAgain}>
+        </Button>
         <Text>{this.state.remainingSeconds}</Text>
       </View>
     );
