@@ -14,6 +14,7 @@ export default class App extends Component {
   }
 
   render() {
+    console.disableYellowBox = true;    
     return (
       <Game 
       key={this.state.gameId}
